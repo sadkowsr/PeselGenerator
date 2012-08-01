@@ -1,8 +1,18 @@
 <resources>
 
     <string name="app_name">Pesel Generator</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Data urodzenia:</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Wprowadź dane</string>
+    <string name="plec">Płeć:</string>
+    <string name="man">Mężczyzna</string>
+    <string name="woman">Kobieta</string>
+    <string-array name="plecChoose">
+        <item >Kobieta</item>
+        <item >Mężczyzna</item>
+    </string-array>
+    <string name="button">Wygeneruj</string>
+    <string name="pesel">Pesel:</string>
+    <string name="clicked">clicked</string>
 
 </resources>
