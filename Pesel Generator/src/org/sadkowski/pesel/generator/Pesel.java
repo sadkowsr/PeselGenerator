@@ -1,7 +1,8 @@
 package org.sadkowski.pesel.generator;
-
+import android.util.Log;
+import android.os.SystemClock;
 /**
- * @author Rafa³ Sadkowski, rafal.sadkowski@gmail.com, http://sadkowski.org
+ * @author Rafaï¿½ Sadkowski, rafal.sadkowski@gmail.com, http://sadkowski.org
  * 
  */
 public class Pesel {
@@ -12,12 +13,13 @@ public class Pesel {
 	 * @param args
 	 */
 	String[] pesels;
-
+	private static String NAME = Pesel.class.getName();
 	public static void main(String[] args) {
+		
 		Pesel pesel = new Pesel();
 		double x=0;
-		int z=99999;
-		double min=10000,max=0,tmp=0;
+		int z=100;
+		double min=1000000000,max=0,tmp=0;
 		try {
 			for(int i=0;i<z;i++){
 			tmp=pesel.generatePesels(2010, 07, 14, Pesel.MEZCZYZNA, 5000);
@@ -30,16 +32,18 @@ public class Pesel {
 		} catch (Exception e) {
 			//System.err.println(e);
 		}
-		System.out.println("Œrednio:"+x/z);
-		System.out.println("Minimum:"+min);
-		System.out.println("Maksimum"+max);
+		Log.d(NAME,"Srednio:"+x*10/(10*z)+" ms");
+		Log.d(NAME,"Minimum:"+min*10/10+" ms");
+		Log.d(NAME,"Maksimum"+max*10/10+" ms");
 		
 	}
 
 	public long generatePesels(int year, int mounth, int day, boolean plec,
 			int ilosc) throws Exception {
-		long start = System.nanoTime();
-		pesels = new String[ilosc];
+		long start = SystemClock.elapsedRealtime();//System.nanoTime();
+				Log.d("PoliczyÅ‚em:","Start: "+start);
+				
+				pesels = new String[ilosc];
 		int[] peselCurrent = new int[PESEL_LENGHT];
 		char[] peselPrint = new char[PESEL_LENGHT];
 		int r;
@@ -104,10 +108,12 @@ public class Pesel {
 			}
 			this.pesels[(i - plecNr)/2] = String.valueOf(peselPrint);
 		}
-		long end = System.nanoTime();
+		long end = //System.nanoTime();
+		 SystemClock.elapsedRealtime();
 		//for(int i=0;i<pesels.length;i++){
 			//System.out.println(pesels[i]);
 		//}
+		Log.d("PoliczyÅ‚em","Koniec: "+end);
 		return (end-start);
 	}
 
