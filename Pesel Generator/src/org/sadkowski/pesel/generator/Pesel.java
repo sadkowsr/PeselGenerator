@@ -2,10 +2,11 @@ package org.sadkowski.pesel.generator;
 import android.util.Log;
 import android.os.SystemClock;
 /**
- * @author Rafa� Sadkowski, rafal.sadkowski@gmail.com, http://sadkowski.org
+ * @author Rafal Sadkowski, rafal.sadkowski@gmail.com, http://sadkowski.org
  * 
  */
 public class Pesel {
+	
 	public static boolean KOBIETA = true;
 	public static boolean MEZCZYZNA = false;
 	private static int PESEL_LENGHT = 11;
@@ -27,7 +28,6 @@ public class Pesel {
 				max=tmp;
 			if(tmp<min)
 				min=tmp;
-			
 			x+=tmp;}
 		} catch (Exception e) {
 			//System.err.println(e);
@@ -81,11 +81,9 @@ public class Pesel {
 		peselCurrent[5] = day % 10;
 
 		//generate a validNumber
-		validMonthNr = peselCurrent[0] + peselCurrent[4] + 3 * (peselCurrent[1] + peselCurrent[5]) + 7 * peselCurrent[2] + 9 * peselCurrent[3];
-		
+		validMonthNr = peselCurrent[0] + peselCurrent[4] + 3 * (peselCurrent[1] + peselCurrent[5]) + 7 * peselCurrent[2] + 9 * peselCurrent[3];	
 		for(int l=0;l<6;l++){
-			peselPrint[l]=(char)(peselCurrent[l]+48);
-			
+			peselPrint[l]=(char)(peselCurrent[l]+48);		
 		}
 		for (int i = 0 + plecNr; i < ilosc; i = i + 2) {
 			peselCurrent[6] = i / 1000;
@@ -110,9 +108,6 @@ public class Pesel {
 		}
 		long end = //System.nanoTime();
 		 SystemClock.elapsedRealtime();
-		//for(int i=0;i<pesels.length;i++){
-			//System.out.println(pesels[i]);
-		//}
 		Log.d("Policzyłem","Koniec: "+end);
 		return (end-start);
 	}
