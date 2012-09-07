@@ -24,7 +24,7 @@ public class Pesel {
 		
 			for(int i=0;i<z;i++){
 				try {
-				tmp=pesel.generatePesels(2010, 07, 14, Pesel.MEZCZYZNA, 5000);
+				tmp=pesel.generatePesels(2010, 07, 14, Pesel.MEZCZYZNA,0, 5000);
 				} catch (Exception e) {
 					Log.d("Wystąpił błąd w trakcie wykonywania funkcji generacji nr pesel 'generatePesels:'","Treść błędu: "+e);
 				}
@@ -41,7 +41,7 @@ public class Pesel {
 	}
 
 	public long generatePesels(int year, int mounth, int day, boolean plec,
-			int ilosc) throws Exception {
+			int poczatek, int ilosc) throws Exception {
 		long start = SystemClock.elapsedRealtime();//System.nanoTime();
 				Log.d("Policzyłem:","Start: "+start);
 				
