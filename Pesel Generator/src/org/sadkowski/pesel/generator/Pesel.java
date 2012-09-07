@@ -21,17 +21,19 @@ public class Pesel {
 		double x=0;
 		int z=100;
 		double min=1000000000,max=0,tmp=0;
-		try {
+		
 			for(int i=0;i<z;i++){
-			tmp=pesel.generatePesels(2010, 07, 14, Pesel.MEZCZYZNA, 5000);
+				try {
+				tmp=pesel.generatePesels(2010, 07, 14, Pesel.MEZCZYZNA, 5000);
+				} catch (Exception e) {
+					Log.d("Wystąpił błąd w trakcie wykonywania funkcji generacji nr pesel 'generatePesels:'","Treść błędu: "+e);
+				}
 			if(tmp>max)
 				max=tmp;
 			if(tmp<min)
 				min=tmp;
 			x+=tmp;}
-		} catch (Exception e) {
-			//System.err.println(e);
-		}
+	
 		Log.d(NAME,"Srednio:"+x*10/(10*z)+" ms");
 		Log.d(NAME,"Minimum:"+min*10/10+" ms");
 		Log.d(NAME,"Maksimum"+max*10/10+" ms");
