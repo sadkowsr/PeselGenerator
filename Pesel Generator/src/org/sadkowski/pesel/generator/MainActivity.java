@@ -2,13 +2,15 @@ package org.sadkowski.pesel.generator;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
+
 
 
 public class MainActivity extends Activity {
@@ -16,7 +18,8 @@ public class MainActivity extends Activity {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);       
+
+    	super.onCreate(savedInstanceState);       
         setContentView(R.layout.activity_main);
     }
 
@@ -27,46 +30,121 @@ public class MainActivity extends Activity {
     }
     
     public void clicked(View v){
-    	try {
 			Log.d(NAME,"TEST");
-			new WymagajacyWatek().execute("");
-			//Pesel.main(null);
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	return;
+			new PeselAsync(1987,7,14,PeselAsync.MEZCZYZNA,0,1000).execute("");
     }
     
-    private class WymagajacyWatek extends AsyncTask<String, Integer, String> {
-    	Pesel pesel;
+       
+    private class PeselAsync extends AsyncTask<String, Integer, String> {
     	EditText et;
     	Button button1;
-    	int rok,miesiac,dzien,ilosc;
-    	Toast toast;
+    	
+    	int year, mounth, day;
+    	boolean plec;
+    	int poczatek,ilosc;
+    
+    	PeselAsync(int year, int mounth, int day, boolean plec, int poczatek, int ilosc){
+    	this.year=year;
+    	this.mounth=mounth;
+    	this.day=day;
+    	this.plec=plec;
+    	this.poczatek=poczatek;
+    	this.ilosc=ilosc;
+    }
+    	
+    	public static final boolean KOBIETA = true;
+    	public static final boolean MEZCZYZNA = false;
+    	private static final int PESEL_LENGHT = 11;
+    	String[] pesels;
+    	//public final String NAMES = Pesel.class.getName();
+    	
     	
    	 @Override
    	 protected String doInBackground(String... params) {
-   		pesel = new Pesel();
-  		try{
-   		pesel.generatePesels(1987, 07, 14, false, 0, 5000);
-   		
-   		publishProgress(100);
-   		}
-   		catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-   		
-   		}
-   	  return null;
+    		long start = SystemClock.elapsedRealtime();//System.nanoTime();
+			Log.d("Policzyłem:","Start: "+start);
+			
+			pesels = new String[ilosc];
+	int[] peselCurrent = new int[PESEL_LENGHT];
+	char[] peselPrint = new char[PESEL_LENGHT];
+	int r;
+	ilosc *= 2;
+	poczatek*=2;
+	int plecNr = 0;
+	if (plec == Pesel.MEZCZYZNA)
+		plecNr++;
+	int validMonthNr;
+	int validNumber;
+	peselCurrent[0] = year / 10 % 10;
+	peselCurrent[1] = year % 10;
+
+	if (year < 1800) {
+		System.err.println("The date is before 1800. Please enter older date");
+		//throw new Exception(
+			//	"The date is before 1800. Please enter older date");
+
+	} else if (year < 1900) {
+		peselCurrent[2] = mounth / 10 + 8;
+
+	} else if (year < 2000) {
+		peselCurrent[2] = mounth / 10;
+	} else if (year < 2100) {
+		peselCurrent[2] = mounth / 10 + 2;
+	} else if (year < 2200) {
+		peselCurrent[2] = mounth / 10 + 4;
+	} else if (year < 2300) {
+		peselCurrent[2] = mounth / 10 + 6;
+	} else {
+		System.err.println("The date is after 2300. Please enter earlier date");
+//		throw new Exception(
+	//			"The date is after 2300. Please enter earlier date");
+	}
+	peselCurrent[3] = mounth % 10;
+	peselCurrent[4] = day / 10;
+	peselCurrent[5] = day % 10;
+
+	//generate a validNumber
+	validMonthNr = peselCurrent[0] + peselCurrent[4] + 3 * (peselCurrent[1] + peselCurrent[5]) + 7 * peselCurrent[2] + 9 * peselCurrent[3];	
+	for(int l=0;l<6;l++){
+		peselPrint[l]=(char)(peselCurrent[l]+48);		
+	}
+	
+	for (int i = poczatek + plecNr; i < ilosc; i = i + 2) {
+		peselCurrent[6] = i / 1000;
+		r = i % 1000;
+		peselCurrent[7] = r / 100;
+		r = r % 100;
+		peselCurrent[8] = r / 10;
+		peselCurrent[9] = r % 10;
+			
+		validNumber =  peselCurrent[8] + 3	* peselCurrent[9] + 7 * peselCurrent[6]	+ 9 * peselCurrent[7] + validMonthNr;
+		validNumber %= 10;
+		if (validNumber == 0)
+			peselPrint[10] = 48;
+		else
+			peselPrint[10] = (char)(/*10-valid+48)*/58 - validNumber); 
+		//end generate a valideNumber
+		
+		for(int l=6;l<10;l++){
+			peselPrint[l]=(char)(peselCurrent[l]+48);
+		}
+		this.pesels[(i - plecNr)/2] = String.valueOf(peselPrint);
+		publishProgress((int)(1+100*i/(ilosc-poczatek)));
+	}
+	long end = //System.nanoTime();
+	 SystemClock.elapsedRealtime();
+	Log.d("Policzyłem","Koniec: "+end);
+   	  return ""/*null*/;
    	 }
    	 
+   	public String[] getPesels() {
+		return pesels;
+	}
+   	
    	 @Override
    	 protected void onPostExecute(String result) {
-   	  // Tutaj mozesz zaimplenentowac czynności, które powinny zostać zrealizowane po zakoczeniu operacji
-   		
-	et.setText(pesel.getPesels()[0]);
+   	  // Tutaj mozesz zaimplenentowac czynności, które powinny zostać zrealizowane po zakoczeniu operacji 		
+	//et.setText(getPesels()[0]);
    	button1.setEnabled(true);
 	et.setEnabled(true);
    	 }
@@ -79,18 +157,16 @@ public class MainActivity extends Activity {
    		
    		et.setEnabled(false);
    		button1.setEnabled(false);
+   		
+   		TextView tv=(TextView)findViewById(R.id.textView3);
+   		tv.setText("PPPPP");
    	 }
    	 
    	 @Override
    	 protected void onProgressUpdate(Integer... progress) {
-   		
-   		 //et.setText("Pracuję:"+progress[0].toString()+"%");
-   		toast = Toast.makeText(getApplicationContext(),Integer.toString(progress[0]),Toast.LENGTH_SHORT);
-        toast.show();
-   	  // Natomiast metoda onProgressUpdate umozliwia aktualizwanie watku głównej podczas działana naszego WymagającegoWatku
-   	  }
+   		 et.setText("Pracuję:"+progress[0].toString()+"%");
+   			  }
    	}
-   	 
 
     
 }

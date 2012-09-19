@@ -14,8 +14,8 @@ public class Pesel {
 	 * @param args
 	 */
 	String[] pesels;
-	private static String NAME = Pesel.class.getName();
-	public static void main(String[] args) {
+	//private static String NAME = Pesel.class.getName();
+	/*public static void main(String[] args) {
 		
 		Pesel pesel = new Pesel();
 		double x=0;
@@ -39,6 +39,7 @@ public class Pesel {
 		Log.d(NAME,"Maksimum"+max*10/10+" ms");
 		
 	}
+	*/
 
 	public long generatePesels(int year, int mounth, int day, boolean plec,
 			int poczatek, int ilosc) throws Exception {
