@@ -7,20 +7,56 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-
-
 
 public class MainActivity extends Activity {
 	private static String NAME = MainActivity.class.getName();
-	
+		
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	
+    	OnClickListener onClicklistener = new OnClickListener(){  		
+    		
+            public void onClick(View v){
+                SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);              
+                TextView tv = (TextView)findViewById(R.id.textView4);
+                tv.setText((CharSequence)String.valueOf(sb.getProgress()+1));   
+            }};
+  
+            OnSeekBarChangeListener onSeekBarChangeListener = new OnSeekBarChangeListener(){
+            	SeekBar sb;
+            	TextView tv;
+			
+            	public void onProgressChanged(SeekBar seekBar, int progress,
+						boolean fromUser) {
+		                tv.setText(String.valueOf(sb.getProgress()+1));
+				}
 
+				public void onStartTrackingTouch(SeekBar seekBar) {	
+					sb = (SeekBar)findViewById(R.id.seekBar1);
+	                tv = (TextView)findViewById(R.id.textView4);                
+				}
+
+				public void onStopTrackingTouch(SeekBar seekBar) {
+				}
+            };
+            
     	super.onCreate(savedInstanceState);       
-        setContentView(R.layout.activity_main);
+    	setContentView(R.layout.aaaa);
+    	
+    	TextView tv = (TextView)findViewById(R.id.textView4);
+        tv.setText(new String("1"));
+     
+       Button button = (Button)findViewById(R.id.button1);        
+       button.setOnClickListener(onClicklistener);
+
+       SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);
+       sb.setOnSeekBarChangeListener(onSeekBarChangeListener);
     }
 
     @Override
@@ -52,7 +88,8 @@ public class MainActivity extends Activity {
     	this.ilosc=ilosc;
     }
     	
-    	public static final boolean KOBIETA = true;
+    	@SuppressWarnings("unused")
+		public static final boolean KOBIETA = true;
     	public static final boolean MEZCZYZNA = false;
     	private static final int PESEL_LENGHT = 11;
     	String[] pesels;
@@ -137,7 +174,8 @@ public class MainActivity extends Activity {
    	  return ""/*null*/;
    	 }
    	 
-   	public String[] getPesels() {
+   	@SuppressWarnings("unused")
+	public String[] getPesels() {
 		return pesels;
 	}
    	
@@ -166,7 +204,5 @@ public class MainActivity extends Activity {
    	 protected void onProgressUpdate(Integer... progress) {
    		 et.setText("Pracuję:"+progress[0].toString()+"%");
    			  }
-   	}
-
-    
+   	}    
 }
