@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -23,9 +24,12 @@ public class MainActivity extends Activity {
     	OnClickListener onClicklistener = new OnClickListener(){  		
     		
             public void onClick(View v){
-                SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);              
-                TextView tv = (TextView)findViewById(R.id.textView4);
-                tv.setText((CharSequence)String.valueOf(sb.getProgress()+1));   
+                /*Blokuje przycisk */
+            	/*Otwieram okno dialogowe które coś liczy */
+            	/*Pobieram wartości */
+            	/* Wykonuję funkcję */
+            	/* Zwracam wartość */
+            	/* Otwieram nową Intecję z klasą przekazując jej wartości*/
             }};
   
             OnSeekBarChangeListener onSeekBarChangeListener = new OnSeekBarChangeListener(){
@@ -43,9 +47,12 @@ public class MainActivity extends Activity {
 				}
 
 				public void onStopTrackingTouch(SeekBar seekBar) {
+					
 				}
             };
             
+            
+            /*START*/
     	super.onCreate(savedInstanceState);       
     	setContentView(R.layout.aaaa);
     	
@@ -57,6 +64,9 @@ public class MainActivity extends Activity {
 
        SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);
        sb.setOnSeekBarChangeListener(onSeekBarChangeListener);
+       
+       DatePicker dp = (DatePicker)findViewById(R.id.datePicker1);
+       dp.updateDate(dp.getYear()-18, dp.getMonth(), dp.getDayOfMonth());
     }
 
     @Override
