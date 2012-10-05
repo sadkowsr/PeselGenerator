@@ -14,32 +14,7 @@ public class Pesel {
 	 * @param args
 	 */
 	String[] pesels;
-	//private static String NAME = Pesel.class.getName();
-	/*public static void main(String[] args) {
-		
-		Pesel pesel = new Pesel();
-		double x=0;
-		int z=100;
-		double min=1000000000,max=0,tmp=0;
-		
-			for(int i=0;i<z;i++){
-				try {
-				tmp=pesel.generatePesels(2010, 07, 14, Pesel.MEZCZYZNA,0, 5000);
-				} catch (Exception e) {
-					Log.d("Wystąpił błąd w trakcie wykonywania funkcji generacji nr pesel 'generatePesels:'","Treść błędu: "+e);
-				}
-			if(tmp>max)
-				max=tmp;
-			if(tmp<min)
-				min=tmp;
-			x+=tmp;}
-	
-		Log.d(NAME,"Srednio:"+x*10/(10*z)+" ms");
-		Log.d(NAME,"Minimum:"+min*10/10+" ms");
-		Log.d(NAME,"Maksimum"+max*10/10+" ms");
-		
-	}
-	*/
+
 
 	public long generatePesels(int year, int mounth, int day, boolean plec,
 			int poczatek, int ilosc) throws Exception {

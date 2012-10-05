@@ -2,33 +2,45 @@ package org.sadkowski.pesel.generator;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.app.Activity;
-import android.util.Log;
+import android.app.ProgressDialog;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	private static String NAME = MainActivity.class.getName();
-		
+	ProgressDialog dialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	
+       	
     	OnClickListener onClicklistener = new OnClickListener(){  		
     		
-            public void onClick(View v){
-                /*Blokuje przycisk */
+            public void onClick(View v){    
+            	/*Blokuje przycisk */
+            	((Button)(findViewById(R.id.button1))).setEnabled(false);; 
+            	
+            	SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);
+            	DatePicker dp = (DatePicker)findViewById(R.id.datePicker1);
+            	Spinner s = (Spinner)findViewById(R.id.spinner1);
+            	s.getSelectedItemId();
             	/*Otwieram okno dialogowe które coś liczy */
+            	dialog = new ProgressDialog(MainActivity.this);
+           		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+           		dialog.setMax(sb.getProgress()+1);  
+            	   
+            	PeselAsync pa = new PeselAsync(dp.getYear(),dp.getMonth(),dp.getDayOfMonth(),PeselAsync.MEZCZYZNA,0,sb.getProgress()+1);
+            	pa.execute("");
             	/*Pobieram wartości */
             	/* Wykonuję funkcję */
             	/* Zwracam wartość */
+            	/*Odblokuje przycisk */
+            	((Button)(findViewById(R.id.button1))).setEnabled(true);; 
             	/* Otwieram nową Intecję z klasą przekazując jej wartości*/
             }};
   
@@ -45,19 +57,16 @@ public class MainActivity extends Activity {
 					sb = (SeekBar)findViewById(R.id.seekBar1);
 	                tv = (TextView)findViewById(R.id.textView4);                
 				}
-
-				public void onStopTrackingTouch(SeekBar seekBar) {
-					
+				public void onStopTrackingTouch(SeekBar seekBar) {				
 				}
             };
-            
-            
-            /*START*/
+                        
+        /*START*/
     	super.onCreate(savedInstanceState);       
     	setContentView(R.layout.aaaa);
     	
-    	TextView tv = (TextView)findViewById(R.id.textView4);
-        tv.setText(new String("1"));
+       TextView tv = (TextView)findViewById(R.id.textView4);
+       tv.setText(new String("1"));
      
        Button button = (Button)findViewById(R.id.button1);        
        button.setOnClickListener(onClicklistener);
@@ -74,17 +83,9 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
-    public void clicked(View v){
-			Log.d(NAME,"TEST");
-			new PeselAsync(1987,7,14,PeselAsync.MEZCZYZNA,0,1000).execute("");
-    }
-    
-       
+          
     private class PeselAsync extends AsyncTask<String, Integer, String> {
-    	EditText et;
-    	Button button1;
-    	
+    	    	
     	int year, mounth, day;
     	boolean plec;
     	int poczatek,ilosc;
@@ -103,15 +104,19 @@ public class MainActivity extends Activity {
     	public static final boolean MEZCZYZNA = false;
     	private static final int PESEL_LENGHT = 11;
     	String[] pesels;
-    	//public final String NAMES = Pesel.class.getName();
-    	
+      		
+    	@Override
+     	 protected void onPreExecute() {
+     	  // Analogicznie do metody onPostExecute, implenentujesz czynnosci do zrealizowania przed uruchomieniem wątku
+    		
+     		dialog.show();
+    	}
     	
    	 @Override
    	 protected String doInBackground(String... params) {
-    		long start = SystemClock.elapsedRealtime();//System.nanoTime();
-			Log.d("Policzyłem:","Start: "+start);
-			
-			pesels = new String[ilosc];
+	int coIleOdswiezac = 1+this.ilosc/100;
+   		 
+   		 pesels = new String[ilosc];
 	int[] peselCurrent = new int[PESEL_LENGHT];
 	char[] peselPrint = new char[PESEL_LENGHT];
 	int r;
@@ -156,7 +161,7 @@ public class MainActivity extends Activity {
 		peselPrint[l]=(char)(peselCurrent[l]+48);		
 	}
 	
-	for (int i = poczatek + plecNr; i < ilosc; i = i + 2) {
+	for (int i = poczatek + plecNr; i < ilosc; i = i + 2) {		
 		peselCurrent[6] = i / 1000;
 		r = i % 1000;
 		peselCurrent[7] = r / 100;
@@ -176,11 +181,20 @@ public class MainActivity extends Activity {
 			peselPrint[l]=(char)(peselCurrent[l]+48);
 		}
 		this.pesels[(i - plecNr)/2] = String.valueOf(peselPrint);
-		publishProgress((int)(1+100*i/(ilosc-poczatek)));
-	}
-	long end = //System.nanoTime();
-	 SystemClock.elapsedRealtime();
-	Log.d("Policzyłem","Koniec: "+end);
+		
+		
+		if(i%coIleOdswiezac==0){
+		publishProgress(coIleOdswiezac);
+				
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+		}
+	dialog.dismiss();
    	  return ""/*null*/;
    	 }
    	 
@@ -189,30 +203,16 @@ public class MainActivity extends Activity {
 		return pesels;
 	}
    	
+       
    	 @Override
    	 protected void onPostExecute(String result) {
    	  // Tutaj mozesz zaimplenentowac czynności, które powinny zostać zrealizowane po zakoczeniu operacji 		
-	//et.setText(getPesels()[0]);
-   	button1.setEnabled(true);
-	et.setEnabled(true);
-   	 }
-   	 
-   	 @Override
-   	 protected void onPreExecute() {
-   	  // Analogicznie do metody onPostExecute, implenentujesz czynnosci do zrealizowania przed uruchomieniem wątku
-   		et = (EditText)findViewById(R.id.editText1);
-   		button1 = (Button)findViewById(R.id.button1);
-   		
-   		et.setEnabled(false);
-   		button1.setEnabled(false);
-   		
-   		TextView tv=(TextView)findViewById(R.id.textView3);
-   		tv.setText("PPPPP");
+   		//button.setEnabled(true);   		
    	 }
    	 
    	 @Override
    	 protected void onProgressUpdate(Integer... progress) {
-   		 et.setText("Pracuję:"+progress[0].toString()+"%");
-   			  }
+   		 dialog.incrementProgressBy(progress[0]);
+   		 }
    	}    
 }
