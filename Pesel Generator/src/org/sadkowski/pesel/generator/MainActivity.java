@@ -1,9 +1,12 @@
 package org.sadkowski.pesel.generator;
 
+import java.util.concurrent.ExecutionException;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	ProgressDialog dialog;
+	String[] pesels;
     @Override
     public void onCreate(Bundle savedInstanceState) {
        	
@@ -26,23 +30,39 @@ public class MainActivity extends Activity {
             	SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);
             	DatePicker dp = (DatePicker)findViewById(R.id.datePicker1);
             	Spinner s = (Spinner)findViewById(R.id.spinner1);
-            	s.getSelectedItemId();
+            	boolean plec=false;
+            	if(s.getSelectedItemId()==0){
+            			plec=PeselAsync.KOBIETA;}
+            	else{plec=PeselAsync.MEZCZYZNA;}
+            	
             	/*Otwieram okno dialogowe które coś liczy */
             	dialog = new ProgressDialog(MainActivity.this);
            		dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
            		dialog.setMax(sb.getProgress()+1);  
             	dialog.setMessage("Trwa generowanie numerów....");   
+            
             	/*Pobieram wartości */
-            	PeselAsync pa = new PeselAsync(dp.getYear(),dp.getMonth(),dp.getDayOfMonth(),PeselAsync.MEZCZYZNA,0,sb.getProgress()+1);
-            	/* Wykonuję funkcję */
-            	pa.execute("");
-            	/* Zwracam wartość */
-            	String[] pesels = pa.getPesels();           	
+            	PeselAsync pa = new PeselAsync(dp.getYear(),dp.getMonth(),dp.getDayOfMonth(),plec,0,sb.getProgress()+1);
+            	/* Wykonuję funkcję i zwracam wartość */
+            	try {
+					pesels = pa.execute("").get();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}    
+            	
+            	
             	/*Odblokuje przycisk */
-            	((Button)(findViewById(R.id.button1))).setEnabled(true);; 
+            	((Button)(findViewById(R.id.button1))).setEnabled(true);
+            	
+            	Log.d("TEST", pesels[0]);
+            		
             	/* Otwieram nową Intecję z klasą przekazując jej wartości*/
             	
-            	
+            	return;
             }};
   
             OnSeekBarChangeListener onSeekBarChangeListener = new OnSeekBarChangeListener(){
@@ -76,7 +96,7 @@ public class MainActivity extends Activity {
        dp.updateDate(dp.getYear()-18, dp.getMonth(), dp.getDayOfMonth());
     }
 
-    private class PeselAsync extends AsyncTask<String, Integer, String> {
+    private class PeselAsync extends AsyncTask<String, Integer, String[]> {
     	    	
     	int year, mounth, day;
     	boolean plec;
@@ -91,11 +111,10 @@ public class MainActivity extends Activity {
     	this.ilosc=ilosc;
     }
     	
-    	@SuppressWarnings("unused")
 		public static final boolean KOBIETA = true;
     	public static final boolean MEZCZYZNA = false;
     	private static final int PESEL_LENGHT = 11;
-    	String[] pesels;
+    	//String[] pesels;
       		
     	@Override
      	 protected void onPreExecute() {  		
@@ -103,10 +122,10 @@ public class MainActivity extends Activity {
     	}
     	
    	 @Override
-   	 protected String doInBackground(String... params) {
+   	 protected String[] doInBackground(String... params) {
 	int coIleOdswiezac = 1+this.ilosc/10;
    		 
-   		 pesels = new String[ilosc];
+   		 String[] pesels = new String[ilosc];
 	int[] peselCurrent = new int[PESEL_LENGHT];
 	char[] peselPrint = new char[PESEL_LENGHT];
 	int r;
@@ -170,7 +189,7 @@ public class MainActivity extends Activity {
 		for(int l=6;l<10;l++){
 			peselPrint[l]=(char)(peselCurrent[l]+48);
 		}
-		this.pesels[(i - plecNr)/2] = String.valueOf(peselPrint);
+		pesels[(i - plecNr)/2] = String.valueOf(peselPrint);
 		
 		
 		if(i%coIleOdswiezac==0){
@@ -185,16 +204,11 @@ public class MainActivity extends Activity {
 		}
 		}
 	dialog.dismiss();
-   	  return ""/*null*/;
+   	  return pesels;
    	 }
    	 
-   	@SuppressWarnings("unused")
-	public String[] getPesels() {
-		return pesels;
-	}
-   	
+  	
        
-   	 @Override
    	 protected void onPostExecute(String result) {}
    	 
    	 @Override
