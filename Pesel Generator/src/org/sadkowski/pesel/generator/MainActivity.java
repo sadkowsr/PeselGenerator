@@ -44,16 +44,17 @@ public class MainActivity extends Activity {
             	/*Pobieram wartości */
             	PeselAsync pa = new PeselAsync(dp.getYear(),dp.getMonth(),dp.getDayOfMonth(),plec,0,sb.getProgress()+1);
             	/* Wykonuję funkcję i zwracam wartość */
+            	
+				//pa.execute("");
             	try {
-					pesels = pa.execute("").get();
+            		pesels=pa.execute("").get();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (ExecutionException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}    
-            	
+				}
             	
             	/*Odblokuje przycisk */
             	((Button)(findViewById(R.id.button1))).setEnabled(true);
@@ -114,7 +115,7 @@ public class MainActivity extends Activity {
 		public static final boolean KOBIETA = true;
     	public static final boolean MEZCZYZNA = false;
     	private static final int PESEL_LENGHT = 11;
-    	//String[] pesels;
+    
       		
     	@Override
      	 protected void onPreExecute() {  		
@@ -124,7 +125,7 @@ public class MainActivity extends Activity {
    	 @Override
    	 protected String[] doInBackground(String... params) {
 	int coIleOdswiezac = 1+this.ilosc/10;
-   		 
+   		
    		 String[] pesels = new String[ilosc];
 	int[] peselCurrent = new int[PESEL_LENGHT];
 	char[] peselPrint = new char[PESEL_LENGHT];
@@ -204,13 +205,12 @@ public class MainActivity extends Activity {
 		}
 		}
 	dialog.dismiss();
-   	  return pesels;
+     
+	return pesels;
    	 }
    	 
   	
        
-   	 protected void onPostExecute(String result) {}
-   	 
    	 @Override
    	 protected void onProgressUpdate(Integer... progress) {
    		 dialog.incrementProgressBy(progress[0]);
