@@ -7,15 +7,18 @@
     <string name="plec">Płeć:</string>
     <string name="man">Mężczyzna</string>
     <string name="woman">Kobieta</string>
+
     <string-array name="plecChoose">
-        <item >Kobieta</item>
-        <item >Mężczyzna</item>
+        <item>Kobieta</item>
+        <item>Mężczyzna</item>
     </string-array>
+
     <string name="button">Wygeneruj</string>
     <string name="pesel">Pesel:</string>
     <string name="clicked">clicked</string>
     <string name="dataurodzenia">Data urodzenia:</string>
     <string name="ilosc">Ilość:</string>
     <string name="zero">0</string>
+    <string name="title_activity_list">Lista Peseli</string>
 
 </resources>

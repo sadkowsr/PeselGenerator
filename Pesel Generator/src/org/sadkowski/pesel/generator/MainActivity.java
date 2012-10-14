@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -45,7 +44,6 @@ public class MainActivity extends Activity {
             	PeselAsync pa = new PeselAsync(dp.getYear(),dp.getMonth()+1,dp.getDayOfMonth(),plec,0,sb.getProgress()+1);
             	/* Wykonuję funkcję i zwracam wartość */
             	
-				//pa.execute("");
             	try {
             		pesels=pa.execute("").get();
 				} catch (InterruptedException e) {
@@ -119,6 +117,11 @@ public class MainActivity extends Activity {
      	 protected void onPreExecute() {  		
      		dialog.show();
     	}
+    	
+    	@Override
+    	 protected void onPostExecute(String[] param) {  		
+    		;
+   	}
     	
    	 @Override
    	 protected String[] doInBackground(String... params) {
