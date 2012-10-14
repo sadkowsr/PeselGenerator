@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
             	dialog.setMessage("Trwa generowanie numerów....");   
             
             	/*Pobieram wartości */
-            	PeselAsync pa = new PeselAsync(dp.getYear(),dp.getMonth(),dp.getDayOfMonth(),plec,0,sb.getProgress()+1);
+            	PeselAsync pa = new PeselAsync(dp.getYear(),dp.getMonth()+1,dp.getDayOfMonth(),plec,0,sb.getProgress()+1);
             	/* Wykonuję funkcję i zwracam wartość */
             	
 				//pa.execute("");
@@ -58,9 +58,7 @@ public class MainActivity extends Activity {
             	
             	/*Odblokuje przycisk */
             	((Button)(findViewById(R.id.button1))).setEnabled(true);
-            	
-            	Log.d("TEST", pesels[0]);
-            		
+            	           	
             	/* Otwieram nową Intecję z klasą przekazując jej wartości*/
             	
             	return;
@@ -92,8 +90,8 @@ public class MainActivity extends Activity {
        
        TextView tv = (TextView)findViewById(R.id.textView4);
        tv.setText(String.valueOf(sb.getProgress()+1));
-      // tv.setText("1");
        DatePicker dp = (DatePicker)findViewById(R.id.datePicker1);
+       
        dp.updateDate(dp.getYear()-18, dp.getMonth(), dp.getDayOfMonth());
     }
 
