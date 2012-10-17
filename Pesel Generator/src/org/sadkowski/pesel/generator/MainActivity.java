@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -58,7 +59,8 @@ public class MainActivity extends Activity {
             	((Button)(findViewById(R.id.button1))).setEnabled(true);
             	           	
             	/* Otwieram nową Intecję z klasą przekazując jej wartości*/
-            	
+            	Intent intent = new Intent(getBaseContext(), ListPeselActivity.class);
+            	startActivity(intent);
             	return;
             }};
   
