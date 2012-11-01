@@ -20,5 +20,6 @@
     <string name="ilosc">Ilość:</string>
     <string name="zero">0</string>
     <string name="title_activity_list">Lista Peseli</string>
+    <string name="title_activity_list_pesel">Lista Nr Pesel</string>
 
 </resources>
