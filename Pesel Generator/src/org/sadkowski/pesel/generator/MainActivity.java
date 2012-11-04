@@ -58,6 +58,8 @@ public class MainActivity extends Activity {
             	           	
             	/* Otwieram nową Intecję z klasą przekazując jej wartości*/
             	Intent intent = new Intent(getBaseContext(), ListPeselActivity.class);
+            	//przekazanie aktywności
+            	intent.putExtra("pesels", pesels);
             	startActivity(intent);
             	return;
             }};
@@ -200,13 +202,11 @@ public class MainActivity extends Activity {
 		try {
 			Thread.sleep(10);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		}
 		}
 	dialog.dismiss();
-     
 	return pesels;
    	 }
    	 
