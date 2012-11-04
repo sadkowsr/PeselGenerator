@@ -20,7 +20,7 @@ public class ListPeselActivity extends Activity {
         String[] elementy_listy = { "W³asna lista", "",""};
         ListView prosta_lista = (ListView) findViewById(R.id.listView1);
          
-      //  @SuppressWarnings({ "rawtypes", "unchecked" })
+      
 		ArrayAdapter<String> adapter_listy = new ArrayAdapter<String>(this,
             android.R.layout.simple_list_item_1, elementy_listy);
         prosta_lista.setAdapter(adapter_listy);
