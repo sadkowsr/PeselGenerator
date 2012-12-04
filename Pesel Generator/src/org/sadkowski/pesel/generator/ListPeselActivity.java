@@ -40,7 +40,8 @@ public class ListPeselActivity extends Activity {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3) {
-				copyToClipboard4(""+elements[pos]);			
+				copyToClipboard4(""+elements[pos]);	
+				
 				Toast toast = Toast.makeText(getApplicationContext(), 
 						"Skopiowano do schowka: "+elements[pos], Toast.LENGTH_LONG);
 				toast.show();

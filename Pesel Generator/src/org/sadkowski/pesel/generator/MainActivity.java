@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,11 +22,16 @@ public class MainActivity extends Activity {
 	String[] pesels;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
+		super.onCreate(savedInstanceState);       
+		setContentView(R.layout.aaaa);
+		//We can use only Elements use in actual Content :(
+		
+			
+			
 		OnClickListener onClicklistener = new OnClickListener(){  		
 
 			public void onClick(View v){    
-				/*Blocked button */
+				//Blocked button
 				((Button)(findViewById(R.id.button1))).setEnabled(false);; 
 				SeekBar sb = (SeekBar)findViewById(R.id.seekBar1);
 				DatePicker dp = (DatePicker)findViewById(R.id.datePicker1);
@@ -35,15 +41,15 @@ public class MainActivity extends Activity {
 					plec=PeselAsync.KOBIETA;}
 				else{plec=PeselAsync.MEZCZYZNA;}
 
-				/*Otwieram okno dialogowe które coś liczy */
+				//Otwieram okno dialogowe które coś liczy
 				dialog = new ProgressDialog(MainActivity.this);
 				dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 				dialog.setMax(sb.getProgress()+1);  
 				dialog.setMessage("Trwa generowanie numerów....");   
 
-				/*Pobieram wartości */
+				//Pobieram wartości
 				PeselAsync pa = new PeselAsync(dp.getYear(),dp.getMonth()+1,dp.getDayOfMonth(),plec,0,sb.getProgress()+1);
-				/* Wykonuję funkcję i zwracam wartość */
+				//Wykonuję funkcję i zwracam wartość 
 
 				try {
 					pesels=pa.execute("").get();
@@ -53,10 +59,10 @@ public class MainActivity extends Activity {
 					e.printStackTrace();
 				}
 
-				/*Odblokuje przycisk */
+				//Odblokuje przycisk
 				((Button)(findViewById(R.id.button1))).setEnabled(true);
 
-				/* Otwieram nową Intecję z klasą przekazując jej wartości*/
+				// Otwieram nową Intecję z klasą przekazując jej wartości
 				Intent intent = new Intent(getBaseContext(), ListPeselActivity.class);
 				//przekazanie aktywności
 				intent.putExtra("pesels", pesels);
@@ -76,10 +82,12 @@ public class MainActivity extends Activity {
 				public void onStartTrackingTouch(SeekBar seekBar) {}
 				public void onStopTrackingTouch(SeekBar seekBar) {}
 			};
-
-			/*START*/
-			super.onCreate(savedInstanceState);       
-			setContentView(R.layout.aaaa);
+	
+			//START
+			
+			
+			
+			//setContentView(R.layout.aaaa);
 
 			Button button = (Button)findViewById(R.id.button1);        
 			button.setOnClickListener(onClicklistener);
@@ -93,6 +101,7 @@ public class MainActivity extends Activity {
 			DatePicker dp = (DatePicker)findViewById(R.id.datePicker1);
 
 			dp.updateDate(dp.getYear()-18, dp.getMonth(), dp.getDayOfMonth());
+
 	}
 
 	private class PeselAsync extends AsyncTask<String, Integer, String[]> {
@@ -158,15 +167,14 @@ public class MainActivity extends Activity {
 			} else if (year < 2300) {
 				peselCurrent[2] = mounth / 10 + 6;
 			} else {
-				System.err.println("The date is after 2300. Please enter earlier date");
-				//		throw new Exception(
-				//			"The date is after 2300. Please enter earlier date");
+			Log.d("ERROR","The date is after 2300. Please enter earlier date");
+				
 			}
 			peselCurrent[3] = mounth % 10;
 			peselCurrent[4] = day / 10;
 			peselCurrent[5] = day % 10;
 
-			//generate a validNumber
+			
 			validMonthNr = peselCurrent[0] + peselCurrent[4] + 3 * (peselCurrent[1] + peselCurrent[5]) + 7 * peselCurrent[2] + 9 * peselCurrent[3];	
 			for(int l=0;l<6;l++){
 				peselPrint[l]=(char)(peselCurrent[l]+48);		
@@ -185,8 +193,8 @@ public class MainActivity extends Activity {
 				if (validNumber == 0)
 					peselPrint[10] = 48;
 				else
-					peselPrint[10] = (char)(/*10-valid+48)*/58 - validNumber); 
-				//end generate a valideNumber
+					peselPrint[10] = (char)(58 - validNumber); // 58 -> 10-valid+48) 
+				
 
 				for(int l=6;l<10;l++){
 					peselPrint[l]=(char)(peselCurrent[l]+48);

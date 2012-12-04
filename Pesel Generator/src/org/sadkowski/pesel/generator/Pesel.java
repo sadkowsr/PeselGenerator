@@ -21,7 +21,7 @@ public class Pesel {
 		long start = SystemClock.elapsedRealtime();//System.nanoTime();
 				Log.d("Policzyłem:","Start: "+start);
 				
-				pesels = new String[ilosc];
+		pesels = new String[ilosc];
 		int[] peselCurrent = new int[PESEL_LENGHT];
 		char[] peselPrint = new char[PESEL_LENGHT];
 		int r;

@@ -21,5 +21,7 @@
     <string name="zero">0</string>
     <string name="title_activity_list">Lista Peseli</string>
     <string name="title_activity_list_pesel">Lista Nr Pesel</string>
+    <string name="generator">Wygeneruj</string>
+    <string name="sprawdz">Sprawdź</string>
 
 </resources>
